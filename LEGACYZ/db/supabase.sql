@@ -17,7 +17,8 @@
 --      "Allow new users to sign up". Sin este paso, cualquiera que vea la
 --      clave pública del sitio puede crearse una cuenta y editar el
 --      contenido.
---   5. En config.js: completar url y clavePublica, y dejar backend: 'auto'.
+--   5. En assets/js/nucleo/config.js: completar url y clavePublica, y dejar
+--      backend: 'auto'.
 --
 -- Los nombres de tablas y columnas coinciden exactamente con los que usa
 -- store.js, así que no hay que tocar el código JavaScript.

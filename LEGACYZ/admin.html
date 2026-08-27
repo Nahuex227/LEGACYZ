@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="LEGACYZ — calculadora de requerimiento de proteína: cuántos gramos por día necesita una persona, calculados en segundos.">
   <title>Panel de administración — LEGACYZ</title>
-  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="icon" type="image/png" href="assets/img/logo.png">
 
   <!-- Tema guardado: se aplica antes de dibujar para que no parpadee -->
   <script>try{if(localStorage.getItem('legacyz.tema')==='claro')document.documentElement.setAttribute('data-tema','claro');}catch(e){}</script>
@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="estilos.css">
+  <link rel="stylesheet" href="assets/css/estilos.css">
 </head>
 <body data-pagina="admin">
 
@@ -31,7 +31,7 @@
   <header class="cabecera">
     <div class="cabecera-contenido">
       <a href="index.html" class="marca">
-        <span class="marca-logo"><img src="logo.png" alt="Logo de LEGACYZ"></span>
+        <span class="marca-logo"><img src="assets/img/logo.png" alt="Logo de LEGACYZ"></span>
         <span class="marca-texto">
           <h1 data-sitio="marca">LEGACYZ</h1>
           <span class="marca-slogan" data-sitio="slogan">Precisión en cada gramo</span>
@@ -82,7 +82,7 @@
   <section class="seccion" data-admin="acceso" hidden>
     <div class="contenedor contenedor--angosto">
       <form class="panel" data-admin="login" autocomplete="on">
-        <img src="logo-completo.png" alt="LEGACYZ" class="acceso-logo">
+        <img src="assets/img/logo-completo.png" alt="LEGACYZ" class="acceso-logo">
         <div class="panel-titulo"><h3>Acceso al panel</h3><span class="pastilla">Requiere cuenta</span></div>
         <p>Este panel edita el contenido que ven las ocho páginas del sitio. Iniciá sesión para continuar.</p>
 
@@ -132,7 +132,7 @@
 
         <nav class="admin-menu">
           <button type="button" class="activo" data-seccion="sitio">Identidad</button>
-          <button type="button" data-seccion="equipo">Equipo</button>
+          <button type="button" data-seccion="equipo">Nosotros</button>
           <button type="button" data-seccion="componentes">Componentes</button>
           <button type="button" data-seccion="galeria">Galería</button>
           <button type="button" data-seccion="bitacora">Historia</button>
@@ -180,8 +180,8 @@
                a partir de la configuración de campos que tiene adentro. -->
           <div class="admin-seccion" data-seccion="equipo">
             <div class="seccion-cabecera">
-              <span class="etiqueta">Equipo</span>
-              <h2>Equipo</h2>
+              <span class="etiqueta">Nosotros</span>
+              <h2>Quiénes hacemos LEGACYZ</h2>
               <p class="bajada">Integrantes, roles y fotos. El orden define cómo se muestran en la página.</p>
             </div>
             <div class="fila mb-2">
@@ -260,7 +260,7 @@
 
             <div class="panel mt-2">
               <div class="panel-titulo"><h3>Copia de seguridad</h3></div>
-              <p>Descargá todo el contenido en un archivo JSON. Sirve como respaldo y también para volver a generar el contenido de <span class="mono">data.js</span>, que es lo que ve el sitio cuando no hay conexión.</p>
+              <p>Descargá todo el contenido en un archivo JSON. Sirve como respaldo y también para volver a generar el contenido de <span class="mono">assets/js/nucleo/data.js</span>, que es lo que ve el sitio cuando no hay conexión.</p>
               <div class="fila mt-1">
                 <button type="button" class="btn btn--linea" data-admin="exportar">Descargar copia</button>
                 <button type="button" class="btn btn--peligro" data-admin="restaurar">Restaurar contenido original</button>
@@ -269,7 +269,7 @@
 
             <div class="nota">
               <span class="nota-icono">◆</span>
-              <p>El modo de datos se elige en <span class="mono">config.js</span>, en la línea <span class="mono">backend</span>. Con <span class="mono">'auto'</span> el sitio usa la base de datos y cae solo al contenido local si no hay conexión. Las páginas no se modifican nunca.</p>
+              <p>El modo de datos se elige en <span class="mono">assets/js/nucleo/config.js</span>, en la línea <span class="mono">backend</span>. Con <span class="mono">'auto'</span> el sitio usa la base de datos y cae solo al contenido local si no hay conexión. Las páginas no se modifican nunca.</p>
             </div>
           </div>
 
@@ -319,12 +319,12 @@
   </footer>
 
   <!-- CAPA DE DATOS Y LÓGICA (el orden importa) -->
-  <script src="config.js"></script>
-  <script src="data.js"></script>
-  <script src="store.js"></script>
-  <script src="ui.js"></script>
-  <script src="script.js"></script>
-  <script src="admin.js"></script>
+  <script src="assets/js/nucleo/config.js"></script>
+  <script src="assets/js/nucleo/data.js"></script>
+  <script src="assets/js/nucleo/store.js"></script>
+  <script src="assets/js/nucleo/ui.js"></script>
+  <script src="assets/js/nucleo/script.js"></script>
+  <script src="assets/js/paginas/admin.js"></script>
 
 </body>
 </html>

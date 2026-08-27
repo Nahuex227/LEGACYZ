@@ -21,24 +21,47 @@ Sitio informativo y funcional del proyecto. Se abre haciendo **doble clic en
 | `equipo.html` | Integrantes, roles y reflexión grupal |
 | `admin.html` | Panel para editar todo el contenido sin tocar el código |
 
-## Los archivos de código
+## Cómo están organizados los archivos
+
+Las nueve páginas quedan en la raíz, porque son las direcciones públicas del
+sitio (`/calculadora.html`, `/galeria.html`, …). Todo lo demás está agrupado
+por tipo:
+
+```
+LEGACYZ/
+├── index.html            las nueve páginas, en la raíz
+├── proyecto.html
+├── …
+├── assets/
+│   ├── css/
+│   │   └── estilos.css   toda la apariencia
+│   ├── js/
+│   │   ├── nucleo/       lo que cargan las nueve páginas
+│   │   └── paginas/      lo que carga una sola página
+│   └── img/              logos
+├── db/
+│   ├── supabase.sql      la base entera: tablas, seguridad y contenido
+│   └── legacyz-contenido.json   respaldo exportado desde el panel
+└── README.md
+```
 
 | Archivo | Responsabilidad |
 |---|---|
-| `estilos.css` | Toda la apariencia. **Los colores están en el bloque `:root` del inicio** |
-| `config.js` | Configuración: modo de datos, claves, nombres de tablas |
-| `data.js` | Contenido de fábrica (la "semilla") |
-| `store.js` | **Capa de datos.** Única puerta de acceso a la información |
-| `ui.js` | Utilidades de interfaz que se repiten en varias páginas |
-| `script.js` | Arranque general: tema, menú, carrusel, listas de contenido |
-| `calculadora.js` | Lógica de la calculadora web |
-| `simulador.js` | Máquina de estados del dispositivo simulado |
-| `admin.js` | Panel de administración y pantalla de acceso |
-| `supabase.sql` | Base de datos completa: tablas, seguridad y contenido inicial |
-| `logo.png` · `logo-completo.png` | Logo del proyecto |
+| `assets/css/estilos.css` | Toda la apariencia. **Los colores están en el bloque `:root` del inicio** |
+| `assets/js/nucleo/config.js` | Configuración: modo de datos, claves, nombres de tablas |
+| `assets/js/nucleo/data.js` | Contenido de fábrica (la "semilla") |
+| `assets/js/nucleo/store.js` | **Capa de datos.** Única puerta de acceso a la información |
+| `assets/js/nucleo/ui.js` | Utilidades de interfaz que se repiten en varias páginas |
+| `assets/js/nucleo/script.js` | Arranque general: tema, menú, carrusel, listas de contenido |
+| `assets/js/paginas/calculadora.js` | Lógica de la calculadora web |
+| `assets/js/paginas/simulador.js` | Máquina de estados del dispositivo simulado |
+| `assets/js/paginas/admin.js` | Panel de administración y pantalla de acceso |
+| `db/supabase.sql` | Base de datos completa: tablas, seguridad y contenido inicial |
+| `assets/img/logo.png` · `logo-completo.png` | Logo del proyecto |
 
-Todos los archivos viven en la misma carpeta: el sitio no necesita compilarse
-ni instalar nada para funcionar.
+El sitio sigue sin necesitar compilarse ni instalar nada: son archivos
+estáticos y las rutas son relativas, así que funciona igual abierto desde el
+disco o publicado en un servidor.
 
 ---
 
