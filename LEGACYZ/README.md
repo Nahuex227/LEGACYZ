@@ -1,6 +1,6 @@
 # LEGACYZ — Sitio del proyecto
 
-**Calculadora de Requerimiento de Proteína** · Robótica 5° Año · IPET 1308 · 2026
+**Calculadora de Requerimiento de Proteína** · LEGACYZ · 2026
 
 Sitio informativo y funcional del proyecto. Se abre haciendo **doble clic en
 `index.html`**: no necesita servidor, ni instalación, ni programas aparte.
@@ -37,7 +37,8 @@ Sitio informativo y funcional del proyecto. Se abre haciendo **doble clic en
 | `supabase.sql` | Base de datos completa: tablas, seguridad y contenido inicial |
 | `logo.png` · `logo-completo.png` | Logo del proyecto |
 
-Todos los archivos están en la misma carpeta, como pide la guía de la materia.
+Todos los archivos viven en la misma carpeta: el sitio no necesita compilarse
+ni instalar nada para funcionar.
 
 ---
 
@@ -147,5 +148,3 @@ también desde el celular.
   `1` a `3` para el objetivo, `0` a `9` para el peso, `A` para confirmar y
   `C` para reiniciar.
 - El sitio funciona en celular: la navegación se convierte en un menú.
-- En `GUION-EXPOSICION.md` está el guion de qué decir sobre cada archivo y las
-  preguntas que puede hacer el profesor.

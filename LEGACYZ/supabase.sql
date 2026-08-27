@@ -1,7 +1,7 @@
 -- ==========================================================================
 -- LEGACYZ — Base de datos completa (Supabase / PostgreSQL)
 -- Calculadora de Requerimiento de Proteína
--- Robótica 5° Año — IPET 1308 — 2026
+-- LEGACYZ — 2026
 --
 -- QUÉ ES ESTE ARCHIVO
 -- Todo lo que hay que ejecutar para dejar la base lista desde cero. Ya está
@@ -36,12 +36,17 @@ create table if not exists public.sitio (
   slogan       text,
   producto     text,
   descripcion  text,
-  institucion  text,
-  curso        text,
-  materia      text,
-  profesor     text,
   anio         text,
   email        text,
+
+  -- Datos del botón "Colaborar" del pie. Mientras estén vacíos, el bloque
+  -- no se muestra en ninguna página (lo decide script.js).
+  --   donacion_url    link de pago (Mercado Pago u otro). Debe empezar con https://
+  --   donacion_alias  alias o CVU para transferir
+  --   donacion_texto  texto del botón; si queda vacío se usa uno por defecto
+  donacion_url    text,
+  donacion_alias  text,
+  donacion_texto  text,
   constraint sitio_fila_unica check (id = 1)
 );
 
@@ -295,16 +300,15 @@ create policy "fotos_borrar_autenticado"
 -- Es el mismo contenido que está en data.js.
 -- ==========================================================================
 
-insert into public.sitio (id, marca, slogan, producto, descripcion, institucion, curso, materia, profesor, anio, email)
+-- Los tres campos de donación quedan a propósito sin cargar: se completan
+-- desde admin.html › Identidad, para no dejar datos de cobro escritos en un
+-- archivo que está publicado en GitHub.
+insert into public.sitio (id, marca, slogan, producto, descripcion, anio, email)
 values (1,
   'LEGACYZ',
-  'Precisión en cada gramo',
+  'Marcando la diferencia desde el inicio',
   'Calculadora de Requerimiento de Proteína',
   'Un dispositivo autónomo que calcula en segundos cuánta proteína necesita una persona por día, sin celular, sin aplicación y sin conexión a internet.',
-  'IPET 1308',
-  'Robótica 5° Año',
-  'Diseño de Páginas Web · Informática',
-  'Prof. Acosta, Lucas Leonardo',
   '2026',
   'legacyzsuplementos@gmail.com')
 on conflict (id) do nothing;

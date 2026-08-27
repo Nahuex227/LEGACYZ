@@ -1,7 +1,7 @@
 /* ==========================================================================
    LEGACYZ — Hoja de estilos única del sitio
    Proyecto: Calculadora de Requerimiento de Proteína (Arduino)
-   Robótica 5° Año — IPET 1308 — 2026
+   LEGACYZ — 2026
 
    ORGANIZACIÓN DEL ARCHIVO
    01. Variables (tokens de diseño)   ← LOS COLORES SE CAMBIAN ACÁ
@@ -1654,6 +1654,37 @@ input.invalido, select.invalido { border-color: var(--lz-error); }
 .pie-links { display: grid; gap: 7px; }
 .pie-links a { font-size: 0.88rem; color: var(--lz-texto-medio); }
 .pie-links a:hover { color: var(--lz-oro); }
+
+/* BLOQUE DE COLABORACIÓN
+   Va entre las columnas del pie y la línea final. Llega oculto desde el
+   HTML (atributo hidden) y solo aparece si hay datos de donación cargados
+   en el panel de administración. */
+
+.pie-donacion {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding: 22px 24px;
+  border: 1px solid var(--lz-oro-borde);
+  border-radius: var(--lz-radio);
+  background: var(--lz-oro-tenue);
+}
+
+.pie-donacion h4 { margin: 0; color: var(--lz-oro); }
+
+.pie-donacion p {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 0.88rem;
+  color: var(--lz-texto-suave);
+}
+
+.fila--donacion { margin-top: 6px; }
+
+@media (max-width: 600px) {
+  .pie-donacion { padding: 18px; }
+  .fila--donacion .btn { width: 100%; justify-content: center; }
+}
 
 .pie-base {
   display: flex;

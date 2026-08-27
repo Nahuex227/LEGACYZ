@@ -2,15 +2,14 @@
   "sitio": {
     "id": 1,
     "marca": "LEGACYZ",
-    "slogan": "Precisión en cada gramo",
+    "slogan": "Marcando la diferencia desde el inicio",
     "producto": "Calculadora de Requerimiento de Proteína",
     "descripcion": "Un dispositivo autónomo que calcula en segundos cuánta proteína necesita una persona por día, sin celular, sin aplicación y sin conexión a internet.",
-    "institucion": "IPET 1308",
-    "curso": "Robótica 5° Año",
-    "materia": "Diseño de Páginas Web · Informática",
-    "profesor": "Prof. Acosta, Lucas Leonardo",
     "anio": "2026",
-    "email": "legacyzsuplementos@gmail.com"
+    "email": "legacyzsuplementos@gmail.com",
+    "donacion_url": "",
+    "donacion_alias": "",
+    "donacion_texto": ""
   },
   "galeria": [
     {

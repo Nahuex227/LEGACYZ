@@ -130,7 +130,76 @@
     LZ.store.leerSitio().then(function (sitio) {
       ui.qq('[data-sitio]').forEach(function (el) {
         var campo = el.getAttribute('data-sitio');
-        if (sitio[campo]) el.textContent = sitio[campo];
+        if (!sitio[campo]) return;
+        el.textContent = sitio[campo];
+
+        /* El mail del pie no es solo texto: es un enlace. Si se cambia la
+           direccion en el panel hay que actualizar tambien el destino, o el
+           texto diria una cosa y el enlace llevaria a otra. */
+        if (campo === 'email' && el.tagName === 'A') el.href = 'mailto:' + sitio[campo];
+      });
+
+      dibujarDonacion(sitio);
+    });
+  }
+
+  /* ======================================================================
+     BOTON DE DONACION
+     Aparece en el pie de las nueve paginas, pero SOLO si en el panel de
+     administracion hay cargado un link de pago o un alias. Mientras los dos
+     campos esten vacios el bloque queda oculto: el sitio nunca muestra un
+     boton de donar que no lleva a ningun lado.
+
+     Los datos salen de la tabla "sitio":
+       donacion_url    link de pago (Mercado Pago u otro)
+       donacion_alias  alias o CVU para transferir
+       donacion_texto  texto del boton, opcional
+     ====================================================================== */
+
+  function dibujarDonacion(sitio) {
+    var bloques = ui.qq('[data-donacion]');
+    if (!bloques.length) return;
+
+    var url   = String(sitio.donacion_url   || '').trim();
+    var alias = String(sitio.donacion_alias || '').trim();
+    var texto = String(sitio.donacion_texto || '').trim() || 'Colaborar con el proyecto';
+
+    /* Solo se aceptan direcciones http(s). Sin este control, un link mal
+       cargado en el panel podria ejecutar codigo al hacer clic. */
+    if (url && !/^https?:\/\//i.test(url)) url = '';
+    if (!url && !alias) return;
+
+    bloques.forEach(function (bloque) {
+      var botones = '';
+
+      if (url) {
+        botones += '<a class="btn btn--oro" href="' + ui.esc(url) + '"' +
+                   ' target="_blank" rel="noopener noreferrer">' + ui.esc(texto) + '</a>';
+      }
+      if (alias) {
+        botones += '<button type="button" class="btn btn--linea" data-copiar="' +
+                   ui.esc(alias) + '">Copiar alias: ' + ui.esc(alias) + '</button>';
+      }
+
+      bloque.innerHTML =
+        '<h4>Colaborar</h4>' +
+        '<p>LEGACYZ se sostiene con lo que aporta cada uno. Con lo que juntamos ' +
+        'compramos componentes y seguimos mejorando el dispositivo.</p>' +
+        '<div class="fila fila--donacion">' + botones + '</div>';
+      bloque.hidden = false;
+    });
+
+    /* Copiar el alias: un solo escuchador para todos los botones, y el
+       cartelito de siempre para confirmar que se copio. */
+    ui.qq('[data-copiar]').forEach(function (boton) {
+      boton.addEventListener('click', function () {
+        var valor = boton.getAttribute('data-copiar');
+        if (!navigator.clipboard) { ui.aviso('Alias para transferir: ' + valor); return; }
+        navigator.clipboard.writeText(valor).then(function () {
+          ui.aviso('Alias copiado: ' + valor);
+        }).catch(function () {
+          ui.aviso('Alias para transferir: ' + valor);
+        });
       });
     });
   }

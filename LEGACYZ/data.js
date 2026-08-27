@@ -28,15 +28,18 @@ LZ.datosIniciales = {
      -------------------------------------------------------------------- */
   sitio: {
     marca: 'LEGACYZ',
-    slogan: 'Precisión en cada gramo',
+    slogan: 'Marcando la diferencia desde el inicio',
     producto: 'Calculadora de Requerimiento de Proteína',
     descripcion: 'Un dispositivo autónomo que calcula en segundos cuánta proteína necesita una persona por día, sin celular, sin aplicación y sin conexión a internet.',
-    institucion: 'IPET 1308',
-    curso: 'Robótica 5° Año',
-    materia: 'Diseño de Páginas Web · Informática',
-    profesor: 'Prof. Acosta, Lucas Leonardo',
     anio: '2026',
-    email: 'legacyz.ipet1308@gmail.com'
+    email: 'legacyzsuplementos@gmail.com',
+
+    /* Botón "Colaborar" del pie. Van vacíos a propósito: los datos de cobro
+       se cargan desde admin.html y quedan en la base, no en este archivo,
+       que está publicado en GitHub a la vista de cualquiera. */
+    donacion_url:   '',
+    donacion_alias: '',
+    donacion_texto: ''
   },
 
   /* --------------------------------------------------------------------
