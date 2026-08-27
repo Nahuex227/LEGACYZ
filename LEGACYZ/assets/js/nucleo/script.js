@@ -189,9 +189,88 @@
       bloque.hidden = false;
     });
 
-    /* Copiar el alias: un solo escuchador para todos los botones, y el
-       cartelito de siempre para confirmar que se copio. */
-    ui.qq('[data-copiar]').forEach(function (boton) {
+    dibujarBotonFlotante(url, alias, texto);
+    prepararCopiado();
+  }
+
+  /* ======================================================================
+     BOTON FLOTANTE "DONAR"
+     El bloque del pie explica para que es la plata; este boton hace que la
+     opcion este siempre a mano, sin tener que bajar hasta el final.
+
+     Se arma segun cuantas formas de colaborar haya cargadas:
+       una sola   el boton hace directamente esa accion
+       las dos    el boton abre un panelito con las dos opciones
+     ====================================================================== */
+
+  function dibujarBotonFlotante(url, alias, texto) {
+    if (document.querySelector('.donar-flotante')) return;
+
+    var caja = document.createElement('div');
+    caja.className = 'donar-flotante';
+
+    /* Con una sola opcion no hace falta panel: el boton ES la accion. */
+    if (url && !alias) {
+      caja.innerHTML = '<a class="btn btn--oro" href="' + ui.esc(url) + '"' +
+                       ' target="_blank" rel="noopener noreferrer">Donar</a>';
+      document.body.appendChild(caja);
+      return;
+    }
+    if (alias && !url) {
+      caja.innerHTML = '<button type="button" class="btn btn--oro" data-copiar="' +
+                       ui.esc(alias) + '">Donar</button>';
+      document.body.appendChild(caja);
+      prepararCopiado(caja);
+      return;
+    }
+
+    /* Con las dos, el boton abre y cierra el panel. */
+    caja.innerHTML =
+      '<div class="donar-opciones" id="donar-opciones" hidden>' +
+        '<p>Elegí cómo colaborar</p>' +
+        '<a class="btn btn--oro" href="' + ui.esc(url) + '" target="_blank"' +
+        ' rel="noopener noreferrer">' + ui.esc(texto) + '</a>' +
+        '<button type="button" class="btn btn--linea" data-copiar="' +
+        ui.esc(alias) + '">Copiar alias</button>' +
+      '</div>' +
+      '<button type="button" class="btn btn--oro" data-donar-abrir' +
+      ' aria-expanded="false" aria-controls="donar-opciones">Donar</button>';
+    document.body.appendChild(caja);
+
+    var boton  = ui.q('[data-donar-abrir]', caja);
+    var panel  = ui.q('.donar-opciones', caja);
+
+    function mostrar(abierto) {
+      panel.hidden = !abierto;
+      boton.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+      boton.textContent = abierto ? 'Cerrar' : 'Donar';
+    }
+
+    boton.addEventListener('click', function () { mostrar(panel.hidden); });
+
+    /* Se cierra con Escape o tocando fuera: si no, queda tapando la pagina. */
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !panel.hidden) { mostrar(false); boton.focus(); }
+    });
+    document.addEventListener('click', function (e) {
+      if (!panel.hidden && !caja.contains(e.target)) mostrar(false);
+    });
+
+    prepararCopiado(caja);
+  }
+
+  /* ======================================================================
+     COPIAR EL ALIAS
+     Un solo escuchador para todos los botones que lo pidan, y el cartelito
+     de siempre para confirmar. Si el navegador no deja copiar (pasa cuando
+     la pagina no esta en https), al menos se muestra el alias para anotarlo.
+     ====================================================================== */
+
+  function prepararCopiado(dentro) {
+    ui.qq('[data-copiar]', dentro).forEach(function (boton) {
+      if (boton.dataset.copiarListo) return;
+      boton.dataset.copiarListo = '1';
+
       boton.addEventListener('click', function () {
         var valor = boton.getAttribute('data-copiar');
         if (!navigator.clipboard) { ui.aviso('Alias para transferir: ' + valor); return; }

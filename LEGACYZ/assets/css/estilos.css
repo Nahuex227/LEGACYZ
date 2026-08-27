@@ -1686,6 +1686,61 @@ input.invalido, select.invalido { border-color: var(--lz-error); }
   .fila--donacion .btn { width: 100%; justify-content: center; }
 }
 
+/* BOTÓN FLOTANTE "DONAR"
+   Acompaña el scroll en las nueve páginas. Igual que el bloque del pie, lo
+   crea script.js y solo si hay datos de donación cargados. Se ubica por
+   encima del encabezado (z-index 200) y por debajo del visor de fotos (500)
+   y de los avisos (600), así nunca tapa algo más importante. */
+
+.donar-flotante {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 400;
+  display: grid;
+  gap: 10px;
+  justify-items: end;
+}
+
+.donar-flotante > .btn {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+  padding: 14px 22px;
+}
+
+/* Panel que se abre cuando hay más de una forma de colaborar. */
+.donar-opciones {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  min-width: 232px;
+  border: 1px solid var(--lz-oro-borde);
+  border-radius: var(--lz-radio);
+  background: var(--lz-superficie);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  animation: lz-entrar 0.18s ease both;
+}
+
+.donar-opciones[hidden] { display: none; }
+
+.donar-opciones p {
+  margin: 0 0 2px;
+  font-size: 0.78rem;
+  color: var(--lz-texto-suave);
+}
+
+.donar-opciones .btn { width: 100%; justify-content: center; }
+
+@media (max-width: 600px) {
+  .donar-flotante { right: 14px; bottom: 14px; left: 14px; justify-items: stretch; }
+  .donar-flotante > .btn { justify-content: center; }
+  .donar-opciones { min-width: 0; }
+}
+
+/* Quien prefiere menos movimiento en pantalla no ve la animación. */
+@media (prefers-reduced-motion: reduce) {
+  .donar-opciones { animation: none; }
+}
+
 .pie-base {
   display: flex;
   justify-content: space-between;
