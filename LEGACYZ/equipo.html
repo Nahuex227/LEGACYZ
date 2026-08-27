@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Calculadora de requerimiento de proteína — proyecto de Robótica 5° Año, IPET 1308.">
+  <title>El equipo — LEGACYZ</title>
+  <link rel="icon" type="image/png" href="logo.png">
+
+  <!-- Tema guardado: se aplica antes de dibujar para que no parpadee -->
+  <script>try{if(localStorage.getItem('legacyz.tema')==='claro')document.documentElement.setAttribute('data-tema','claro');}catch(e){}</script>
+
+
+  <!-- ========================================================================
+       SDK DE SUPABASE (la base de datos)
+       Va con "async" a propósito: así el navegador NO espera a que este
+       archivo llegue para mostrar la página. Si no hay internet, el propio
+       navegador avisa que no pudo bajarlo y store.js pasa solo al modo
+       local. La página se ve igual de rápido con o sin conexión.
+       ======================================================================== -->
+  <script async src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body data-pagina="equipo">
+
+  <!-- ENCABEZADO — igual en todas las páginas -->
+  <header class="cabecera">
+    <div class="cabecera-contenido">
+      <a href="index.html" class="marca">
+        <span class="marca-logo"><img src="logo.png" alt="Logo de LEGACYZ"></span>
+        <span class="marca-texto">
+          <h1 data-sitio="marca">LEGACYZ</h1>
+          <span class="marca-slogan" data-sitio="slogan">Precisión en cada gramo</span>
+        </span>
+      </a>
+
+      <nav class="nav" id="menu">
+        <a href="index.html">Inicio</a>
+        <a href="proyecto.html">Proyecto</a>
+        <a href="calculadora.html">Calculadora</a>
+        <a href="simulador.html">Simulador</a>
+        <a href="tecnica.html">Técnica</a>
+        <a href="galeria.html">Galería</a>
+        <a href="bitacora.html">Bitácora</a>
+        <a href="equipo.html" class="activo">Equipo</a>
+      </nav>
+
+      <div class="cabecera-acciones">
+        <button type="button" class="btn-icono" data-accion="tema">☀</button>
+        <button type="button" class="btn-icono btn-menu" data-accion="menu" aria-controls="menu" aria-expanded="false" aria-label="Abrir menú">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="migas">
+    <div class="contenedor"><a href="index.html">Inicio</a> <span>›</span> <span>El equipo</span></div>
+  </div>
+
+  <section class="seccion">
+    <div class="contenedor">
+
+      <div class="seccion-cabecera">
+        <span class="etiqueta">Quiénes lo hicieron</span>
+        <h2>El equipo</h2>
+        <p class="bajada">Estudiantes de 5° año de Robótica del IPET 1308. El proyecto se desarrolló como trabajo integrador de la materia.</p>
+      </div>
+
+      <!-- Los integrantes se dibujan desde la capa de datos (ver script.js).
+           Para editarlos o cargar sus fotos: admin.html › sección Equipo. -->
+      <div class="equipo-grid" data-lista="equipo"></div>
+
+      <div class="panel panel--oro mt-3">
+        <div class="panel-titulo" style="border-color:var(--lz-oro-borde)">
+          <h3>Reflexión grupal</h3>
+        </div>
+        <p>Empezamos pensando que la parte difícil iba a ser la cuenta. No lo fue: la multiplicación es una línea de código. Lo difícil fue todo lo demás. Que la pantalla mostrara algo. Que el teclado devolviera la tecla que se presionaba y no otra. Que un mensaje de 17 caracteres entrara en 16.</p>
+        <p>Si volviéramos a empezar, probaríamos cada componente por separado antes de armar el circuito completo. Perdimos dos semanas buscando un error de programación que en realidad era una dirección I2C equivocada.</p>
+        <p>Lo más satisfactorio fue el momento en que la pantalla mostró 126 gramos para 70 kilos. Era el resultado que habíamos calculado a mano en la carpeta un mes antes.</p>
+      </div>
+
+
+      <div class="navegacion-paginas">
+        <a href="bitacora.html" class="btn btn--linea">← Bitácora</a>
+        <a href="index.html" class="btn btn--oro">Volver al inicio →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="pie">
+    <div class="contenedor">
+      <div class="pie-grid">
+        <div>
+          <h4>El proyecto</h4>
+          <p><strong data-sitio="marca">LEGACYZ</strong> — <span data-sitio="producto">Calculadora de Requerimiento de Proteína</span></p>
+          <p style="font-size:.82rem"><span data-sitio="curso">Robótica 5° Año</span> · <span data-sitio="institucion">IPET 1308</span> · <span data-sitio="anio">2026</span></p>
+        </div>
+        <div>
+          <h4>Secciones</h4>
+          <div class="pie-links">
+            <a href="proyecto.html">El proyecto</a>
+            <a href="calculadora.html">Calculadora web</a>
+            <a href="simulador.html">Simulador</a>
+            <a href="tecnica.html">Documentación técnica</a>
+          </div>
+        </div>
+        <div>
+          <h4>Cátedra</h4>
+          <div class="pie-links">
+            <a href="galeria.html">Galería</a>
+            <a href="bitacora.html">Bitácora</a>
+            <a href="equipo.html">El equipo</a>
+            <a href="admin.html">Administrar contenido</a>
+          </div>
+        </div>
+      </div>
+      <div class="pie-base">
+        <span data-sitio="materia">Diseño de Páginas Web · Informática</span>
+        <span data-sitio="profesor">Prof. Acosta, Lucas Leonardo</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CAPA DE DATOS Y LÓGICA (el orden importa) -->
+  <script src="config.js"></script>
+  <script src="data.js"></script>
+  <script src="store.js"></script>
+  <script src="ui.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>

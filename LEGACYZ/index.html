@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Calculadora de requerimiento de proteína — proyecto de Robótica 5° Año, IPET 1308.">
+  <title>LEGACYZ — Calculadora de Requerimiento de Proteína</title>
+  <link rel="icon" type="image/png" href="logo.png">
+
+  <!-- Tema guardado: se aplica antes de dibujar para que no parpadee -->
+  <script>try{if(localStorage.getItem('legacyz.tema')==='claro')document.documentElement.setAttribute('data-tema','claro');}catch(e){}</script>
+
+
+
+  <!-- ========================================================================
+       SDK DE SUPABASE (la base de datos)
+       Va con "async" a propósito: así el navegador NO espera a que este
+       archivo llegue para mostrar la página. Si no hay internet, el propio
+       navegador avisa que no pudo bajarlo y store.js pasa solo al modo
+       local. La página se ve igual de rápido con o sin conexión.
+       ======================================================================== -->
+  <script async src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body data-pagina="inicio">
+
+  <!-- ENCABEZADO — igual en todas las páginas -->
+  <header class="cabecera">
+    <div class="cabecera-contenido">
+      <a href="index.html" class="marca">
+        <span class="marca-logo"><img src="logo.png" alt="Logo de LEGACYZ"></span>
+        <span class="marca-texto">
+          <h1 data-sitio="marca">LEGACYZ</h1>
+          <span class="marca-slogan" data-sitio="slogan">Precisión en cada gramo</span>
+        </span>
+      </a>
+
+      <nav class="nav" id="menu">
+        <a href="index.html" class="activo">Inicio</a>
+        <a href="proyecto.html">Proyecto</a>
+        <a href="calculadora.html">Calculadora</a>
+        <a href="simulador.html">Simulador</a>
+        <a href="tecnica.html">Técnica</a>
+        <a href="galeria.html">Galería</a>
+        <a href="bitacora.html">Bitácora</a>
+        <a href="equipo.html">Equipo</a>
+      </nav>
+
+      <div class="cabecera-acciones">
+        <button type="button" class="btn-icono" data-accion="tema">☀</button>
+        <button type="button" class="btn-icono btn-menu" data-accion="menu" aria-controls="menu" aria-expanded="false" aria-label="Abrir menú">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- PORTADA -->
+  <section class="hero">
+    <div class="contenedor">
+      <div class="hero-grid">
+        <div>
+          <span class="etiqueta">Robótica 5° Año · IPET 1308 · 2026</span>
+          <h2>Cuánta proteína necesitás, <em>calculado en diez segundos</em></h2>
+          <p class="bajada" data-sitio="descripcion">Un dispositivo autónomo que calcula en segundos cuánta proteína necesita una persona por día, sin celular, sin aplicación y sin conexión a internet.</p>
+          <div class="fila">
+            <a href="calculadora.html" class="btn btn--oro">Probar la calculadora</a>
+            <a href="proyecto.html" class="btn btn--linea">Ver el proyecto</a>
+          </div>
+          <div class="hero-meta">
+            <div><strong data-sitio="institucion">IPET 1308</strong>Institución</div>
+            <div><strong>Arduino UNO</strong>Plataforma</div>
+            <div><strong>5 integrantes</strong>Equipo</div>
+          </div>
+        </div>
+
+        <!-- CARRUSEL — las fotos salen de la galería -->
+        <div class="carrusel">
+          <div class="carrusel-pista" data-lista="carrusel"></div>
+          <button type="button" class="carrusel-btn prev" data-carrusel="-1" aria-label="Foto anterior">❮</button>
+          <button type="button" class="carrusel-btn next" data-carrusel="1" aria-label="Foto siguiente">❯</button>
+          <div class="carrusel-puntos" data-lista="carrusel-puntos"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRESENTACIÓN -->
+  <section class="seccion">
+    <div class="contenedor">
+      <div class="grid grid--2" style="align-items:start;gap:48px">
+        <div>
+          <span class="etiqueta">El proyecto</span>
+          <h2>Una cuenta que casi nadie hace</h2>
+          <p>La cantidad de proteína que necesita una persona por día es una multiplicación: el peso corporal por un factor que depende del estilo de vida y del objetivo. El dato existe y es público, pero está escrito en tablas.</p>
+          <p>Construimos un dispositivo que hace esa cuenta con dos preguntas y la muestra en una pantalla. No necesita celular, no necesita internet y no pide crear una cuenta.</p>
+          <a href="proyecto.html" class="btn btn--linea mt-1">Cómo funciona</a>
+        </div>
+        <div class="panel">
+          <div class="panel-titulo"><h3>La fórmula</h3><span class="pastilla">Guía práctica</span></div>
+          <p class="mono" style="font-size:1rem;color:var(--lz-oro);line-height:2">Peso (kg) × Factor = g de proteína / día</p>
+          <p style="font-size:.9rem">El factor va de 0,8 g/kg en una persona sedentaria a 2,4 g/kg en un déficit calórico que busca conservar masa muscular.</p>
+          <div class="nota" style="margin-bottom:0">
+            <span class="nota-icono">◆</span>
+            <p>Si hay sobrepeso elevado u obesidad, el cálculo se hace con el <strong>peso objetivo</strong> y no con el peso actual.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TARJETAS -->
+  <section class="seccion seccion--superficie seccion--linea">
+    <div class="contenedor">
+      <div class="seccion-cabecera">
+        <span class="etiqueta">Recorrido</span>
+        <h2>Explorá el trabajo</h2>
+      </div>
+      <div class="grid grid--2">
+        <a href="proyecto.html" class="tarjeta revelar">
+          <span class="tarjeta-numero">01</span>
+          <h3>El proyecto</h3>
+          <p>El problema que identificamos, cómo funciona el sistema paso a paso y qué aprendimos en el camino.</p>
+          <span class="tarjeta-link">Leer</span>
+        </a>
+        <a href="calculadora.html" class="tarjeta revelar">
+          <span class="tarjeta-numero">02</span>
+          <h3>Calculadora web</h3>
+          <p>La misma fórmula del dispositivo, con las cinco categorías completas y el historial de cálculos.</p>
+          <span class="tarjeta-link">Calcular</span>
+        </a>
+        <a href="simulador.html" class="tarjeta revelar">
+          <span class="tarjeta-numero">03</span>
+          <h3>Simulador del dispositivo</h3>
+          <p>La pantalla LCD y el teclado matricial funcionando en el navegador, con los estados del programa a la vista.</p>
+          <span class="tarjeta-link">Probar</span>
+        </a>
+        <a href="tecnica.html" class="tarjeta revelar">
+          <span class="tarjeta-numero">04</span>
+          <h3>Documentación técnica</h3>
+          <p>Componentes, conexiones pin por pin, librerías y el código completo del Arduino.</p>
+          <span class="tarjeta-link">Ver</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- DATOS RÁPIDOS -->
+  <section class="seccion seccion--compacta">
+    <div class="contenedor">
+      <div class="datos-grid" data-lista="metricas"></div>
+    </div>
+  </section>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="pie">
+    <div class="contenedor">
+      <div class="pie-grid">
+        <div>
+          <h4>El proyecto</h4>
+          <p><strong data-sitio="marca">LEGACYZ</strong> — <span data-sitio="producto">Calculadora de Requerimiento de Proteína</span></p>
+          <p style="font-size:.82rem"><span data-sitio="curso">Robótica 5° Año</span> · <span data-sitio="institucion">IPET 1308</span> · <span data-sitio="anio">2026</span></p>
+        </div>
+        <div>
+          <h4>Secciones</h4>
+          <div class="pie-links">
+            <a href="proyecto.html">El proyecto</a>
+            <a href="calculadora.html">Calculadora web</a>
+            <a href="simulador.html">Simulador</a>
+            <a href="tecnica.html">Documentación técnica</a>
+          </div>
+        </div>
+        <div>
+          <h4>Cátedra</h4>
+          <div class="pie-links">
+            <a href="galeria.html">Galería</a>
+            <a href="bitacora.html">Bitácora</a>
+            <a href="equipo.html">El equipo</a>
+            <a href="admin.html">Administrar contenido</a>
+          </div>
+        </div>
+      </div>
+      <div class="pie-base">
+        <span data-sitio="materia">Diseño de Páginas Web · Informática</span>
+        <span data-sitio="profesor">Prof. Acosta, Lucas Leonardo</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       CAPA DE DATOS Y LÓGICA
+       El orden importa: cada archivo necesita al anterior.
+         config.js  → configuración: backend, tablas, claves
+         data.js    → contenido inicial (la "semilla" del sitio)
+         store.js   → capa de datos: ÚNICA puerta de acceso a la información
+         ui.js      → utilidades de interfaz que se repiten en varias páginas
+         script.js  → arranque general del sitio
+       ======================================================================== -->
+  <script src="config.js"></script>
+  <script src="data.js"></script>
+  <script src="store.js"></script>
+  <script src="ui.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,133 @@
+/* ==========================================================================
+   LEGACYZ — data.js
+   Contenido de fábrica del sitio: la "semilla".
+
+   PARA QUÉ SIRVE ESTE ARCHIVO
+   Es la tercera y última fuente de datos del sistema (ver store.js). El
+   sitio lo usa cuando no puede llegar a la base de datos y tampoco tiene
+   una copia guardada: por ejemplo, al abrir index.html en una computadora
+   nueva y sin internet. Gracias a esto el sitio nunca se ve vacío.
+
+   Lo mismo que está acá está cargado en las tablas de Supabase, con las
+   instrucciones de supabase.sql.
+
+   SI SE EDITA EL CONTENIDO DESDE admin.html
+   La base de datos pasa a ser la fuente de verdad y este archivo queda
+   viejo. Para volver a emparejarlos: admin.html › Datos › Descargar copia,
+   y pegar el contenido del JSON acá abajo.
+   ========================================================================== */
+
+window.LZ = window.LZ || {};
+
+LZ.datosIniciales = {
+
+  /* --------------------------------------------------------------------
+     IDENTIDAD DEL SITIO
+     Aparece en el encabezado y el pie de las nueve páginas. En el HTML se
+     usa con data-sitio="marca", data-sitio="slogan", etc.
+     -------------------------------------------------------------------- */
+  sitio: {
+    marca: 'LEGACYZ',
+    slogan: 'Precisión en cada gramo',
+    producto: 'Calculadora de Requerimiento de Proteína',
+    descripcion: 'Un dispositivo autónomo que calcula en segundos cuánta proteína necesita una persona por día, sin celular, sin aplicación y sin conexión a internet.',
+    institucion: 'IPET 1308',
+    curso: 'Robótica 5° Año',
+    materia: 'Diseño de Páginas Web · Informática',
+    profesor: 'Prof. Acosta, Lucas Leonardo',
+    anio: '2026',
+    email: 'legacyz.ipet1308@gmail.com'
+  },
+
+  /* --------------------------------------------------------------------
+     DATOS RÁPIDOS DE LA PORTADA
+     Los cuatro números grandes del final de index.html.
+     -------------------------------------------------------------------- */
+  metricas: [
+    { id: 1, valor: '5',   etiqueta: 'Integrantes del equipo',    orden: 1 },
+    { id: 2, valor: '7',   etiqueta: 'Componentes de hardware',   orden: 2 },
+    { id: 3, valor: '3',   etiqueta: 'Estados del programa',      orden: 3 },
+    { id: 4, valor: '10s', etiqueta: 'Para obtener el resultado', orden: 4 }
+  ],
+
+  /* --------------------------------------------------------------------
+     FACTORES DE PROTEÍNA (gramos por kilo de peso)
+     Fuente: la guía práctica de cálculo de requerimiento de proteína.
+
+     min y max    son el rango completo que publica la guía.
+     medio        es el punto medio, y es el valor que usa el cálculo, para
+                  devolver un número único en vez de un intervalo.
+     tecla        la tecla del dispositivo, si esa categoría está ahí.
+     en_dispositivo  false = solo existe en la calculadora web, porque en
+                  la pantalla de 16 columnas no entraban las cinco.
+     -------------------------------------------------------------------- */
+  factores: [
+    { id: 1, clave: 'sedentario',    nombre: 'Sedentario',           descripcion: 'Poca o nula actividad física',              min: 0.8, max: 1.0, medio: 0.9,  tecla: '1', en_dispositivo: true,  orden: 1 },
+    { id: 2, clave: 'activo',        nombre: 'Activo',               descripcion: 'Ejercicio moderado, 3 a 5 días por semana', min: 1.2, max: 1.5, medio: 1.35, tecla: '',  en_dispositivo: false, orden: 2 },
+    { id: 3, clave: 'adulto-mayor',  nombre: 'Adulto mayor',         descripcion: 'Esencial para evitar la pérdida muscular',  min: 1.5, max: 2.0, medio: 1.75, tecla: '',  en_dispositivo: false, orden: 3 },
+    { id: 4, clave: 'atleta',        nombre: 'Atleta / Hipertrofia', descripcion: 'Objetivo de ganar masa muscular',           min: 1.6, max: 2.2, medio: 1.9,  tecla: '2', en_dispositivo: true,  orden: 4 },
+    { id: 5, clave: 'perdida-grasa', nombre: 'Pérdida de grasa',     descripcion: 'Protege el músculo en déficit calórico',    min: 1.8, max: 2.4, medio: 2.1,  tecla: '3', en_dispositivo: true,  orden: 5 }
+  ],
+
+  /* --------------------------------------------------------------------
+     COMPONENTES DE HARDWARE
+     Es la tabla que se ve en tecnica.html.
+     -------------------------------------------------------------------- */
+  componentes: [
+    { id: 1, nombre: 'Arduino UNO R3',            funcion: 'Microcontrolador principal: guarda el programa, lee el teclado y calcula el resultado.',         pines: '—',                                cantidad: 1,  categoria: 'Control',      orden: 1 },
+    { id: 2, nombre: 'Pantalla LCD 16x2 con I2C', funcion: 'Muestra el menú, el peso ingresado y el resultado final. El módulo I2C reduce de 6 cables a 2.', pines: 'SDA → A4 · SCL → A5',              cantidad: 1,  categoria: 'Salida',       orden: 2 },
+    { id: 3, nombre: 'Teclado matricial 4x4',     funcion: 'Única entrada del sistema: selecciona el objetivo, escribe el peso, confirma y reinicia.',       pines: 'Filas 9-8-7-6 · Columnas 5-4-3-2', cantidad: 1,  categoria: 'Entrada',      orden: 3 },
+    { id: 4, nombre: 'Protoboard 830 puntos',     funcion: 'Soporte del circuito y distribución de alimentación de 5V y GND.',                               pines: '—',                                cantidad: 1,  categoria: 'Soporte',      orden: 4 },
+    { id: 5, nombre: 'Cables jumper macho-macho', funcion: 'Conexiones entre el Arduino, el teclado y la pantalla.',                                         pines: '—',                                cantidad: 16, categoria: 'Conexión',     orden: 5 },
+    { id: 6, nombre: 'Cable USB tipo B',          funcion: 'Carga el programa desde la computadora y alimenta la placa.',                                    pines: '—',                                cantidad: 1,  categoria: 'Alimentación', orden: 6 },
+    { id: 7, nombre: 'Batería 9V con conector',   funcion: 'Alimentación autónoma para usar el dispositivo sin computadora en la exposición.',                pines: 'Jack DC',                          cantidad: 1,  categoria: 'Alimentación', orden: 7 }
+  ],
+
+  /* --------------------------------------------------------------------
+     EQUIPO
+     Las fotos se cargan desde admin.html › Equipo. Mientras "foto" esté
+     vacío, la página muestra las iniciales dentro de un círculo.
+     -------------------------------------------------------------------- */
+  equipo: [
+    { id: 1, nombre: 'Cornejo Nahuel',    rol: 'Programación y desarrollo web', aporte: 'Escribió la máquina de estados del programa Arduino y desarrolló este sitio con HTML, CSS y JavaScript.', foto: '', orden: 1 },
+    { id: 2, nombre: 'Duarte Mateo',      rol: 'Diseño del circuito',           aporte: 'Diseñó el esquema de conexiones y resolvió el mapeo de filas y columnas del teclado matricial.',          foto: '', orden: 2 },
+    { id: 3, nombre: 'Godoy Alan',        rol: 'Modelado 3D y gabinete',        aporte: 'Modeló e imprimió el gabinete que sostiene la pantalla y el teclado en una sola pieza.',                   foto: '', orden: 3 },
+    { id: 4, nombre: 'Irigoitia Tiziano', rol: 'Pruebas e integración',         aporte: 'Probó el dispositivo con distintos pesos y objetivos, y detectó los errores de la primera versión.',       foto: '', orden: 4 },
+    { id: 5, nombre: 'Neris Braian',      rol: 'Documentación y contenido',     aporte: 'Investigó los factores de proteína, armó la bitácora del proceso y escribió los textos del sitio.',        foto: '', orden: 5 }
+  ],
+
+  /* --------------------------------------------------------------------
+     GALERÍA
+     Tres categorías, que son las que generan los filtros de galeria.html.
+     Mientras "url" esté vacío, la página dibuja una ilustración según la
+     categoría (ver ui.marcador en ui.js) en lugar de una imagen rota.
+     -------------------------------------------------------------------- */
+  galeria: [
+    { id: 1, categoria: 'Construcción', titulo: 'Primer prototipo en protoboard',  descripcion: 'Arduino, pantalla y teclado conectados por primera vez para probar la comunicación I2C.', url: '', orden: 1 },
+    { id: 2, categoria: 'Construcción', titulo: 'Prueba de la dirección I2C',      descripcion: 'Barrido de direcciones hasta encontrar la del módulo de la pantalla.',                    url: '', orden: 2 },
+    { id: 3, categoria: 'Construcción', titulo: 'Gabinete impreso en 3D',          descripcion: 'Pieza que sostiene la pantalla y el teclado alineados.',                                  url: '', orden: 3 },
+    { id: 4, categoria: 'Circuito',     titulo: 'Conexiones del teclado matricial', descripcion: 'Las cuatro filas a los pines 9 a 6 y las cuatro columnas a los pines 5 a 2.',            url: '', orden: 4 },
+    { id: 5, categoria: 'Circuito',     titulo: 'Bus I2C de la pantalla',          descripcion: 'Solo cuatro cables: GND, VCC, SDA y SCL.',                                               url: '', orden: 5 },
+    { id: 6, categoria: 'Circuito',     titulo: 'Circuito terminado',              descripcion: 'Cableado ordenado y etiquetado antes de cerrar el gabinete.',                            url: '', orden: 6 },
+    { id: 7, categoria: 'Funcionando',  titulo: 'Menú de selección',               descripcion: 'La pantalla mostrando las tres opciones de objetivo.',                                   url: '', orden: 7 },
+    { id: 8, categoria: 'Funcionando',  titulo: 'Ingreso del peso',                descripcion: 'Escribiendo 70 kg con el teclado matricial.',                                            url: '', orden: 8 },
+    { id: 9, categoria: 'Funcionando',  titulo: 'Resultado en pantalla',           descripcion: '126 gramos diarios para 70 kg con factor de hipertrofia.',                               url: '', orden: 9 }
+  ],
+
+  /* --------------------------------------------------------------------
+     BITÁCORA DEL PROCESO
+     La línea de tiempo de bitacora.html. Las fechas van en formato
+     AAAA-MM-DD, que es el que entiende la base de datos.
+     -------------------------------------------------------------------- */
+  bitacora: [
+    { id: 1, fecha: '2026-04-08', titulo: 'Elección del tema',             texto: 'El equipo buscaba un proyecto útil y medible. Partimos de una pregunta concreta: ¿cuánta proteína necesita una persona por día? La respuesta existe y es una multiplicación, pero casi nadie la tiene a mano.', orden: 1 },
+    { id: 2, fecha: '2026-04-22', titulo: 'Investigación de los factores', texto: 'Buscamos los rangos de gramos por kilo de peso para cada estilo de vida y definimos un valor medio por categoría, para que el dispositivo devuelva un número único y no un rango.',                       orden: 2 },
+    { id: 3, fecha: '2026-05-13', titulo: 'Primer circuito en protoboard', texto: 'Conectamos la pantalla LCD por I2C y el teclado matricial. La pantalla encendía pero no mostraba caracteres: la dirección del módulo era 0x27 y no la que habíamos supuesto.',                            orden: 3 },
+    { id: 4, fecha: '2026-06-03', titulo: 'La máquina de estados',         texto: 'Reescribimos el programa con tres estados en lugar de una sola secuencia larga. Con SELECCION_MENU, INGRESO_PESO y MOSTRAR_RESULTADO el código quedó más corto y dejó de mezclar pasos.',                 orden: 4 },
+    { id: 5, fecha: '2026-06-24', titulo: 'Gabinete y pruebas',            texto: 'Imprimimos el gabinete en 3D y probamos el dispositivo con pesos de 1, 2 y 3 dígitos. Limitamos la entrada a 3 dígitos para que el texto nunca desborde las 16 columnas de la pantalla.',                 orden: 5 },
+    { id: 6, fecha: '2026-08-05', titulo: 'Versión web del sistema',       texto: 'Llevamos la misma lógica al navegador: la calculadora con las cinco categorías y un simulador que reproduce la pantalla y el teclado, para poder mostrar el proyecto incluso sin el hardware sobre la mesa.', orden: 6 }
+  ]
+
+  /* Nota: "calculos" no figura acá a propósito. El historial de la
+     calculadora se genera con el uso; no viene con contenido de fábrica. */
+};

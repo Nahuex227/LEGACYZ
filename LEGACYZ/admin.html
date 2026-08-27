@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Calculadora de requerimiento de proteína — proyecto de Robótica 5° Año, IPET 1308.">
+  <title>Panel de administración — LEGACYZ</title>
+  <link rel="icon" type="image/png" href="logo.png">
+
+  <!-- Tema guardado: se aplica antes de dibujar para que no parpadee -->
+  <script>try{if(localStorage.getItem('legacyz.tema')==='claro')document.documentElement.setAttribute('data-tema','claro');}catch(e){}</script>
+
+
+  <!-- ========================================================================
+       SDK DE SUPABASE (la base de datos)
+       Va con "async" a propósito: así el navegador NO espera a que este
+       archivo llegue para mostrar la página. Si no hay internet, el propio
+       navegador avisa que no pudo bajarlo y store.js pasa solo al modo
+       local. La página se ve igual de rápido con o sin conexión.
+       ======================================================================== -->
+  <script async src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body data-pagina="admin">
+
+  <!-- ENCABEZADO — igual en todas las páginas -->
+  <header class="cabecera">
+    <div class="cabecera-contenido">
+      <a href="index.html" class="marca">
+        <span class="marca-logo"><img src="logo.png" alt="Logo de LEGACYZ"></span>
+        <span class="marca-texto">
+          <h1 data-sitio="marca">LEGACYZ</h1>
+          <span class="marca-slogan" data-sitio="slogan">Precisión en cada gramo</span>
+        </span>
+      </a>
+
+      <nav class="nav" id="menu">
+        <a href="index.html">Inicio</a>
+        <a href="proyecto.html">Proyecto</a>
+        <a href="calculadora.html">Calculadora</a>
+        <a href="simulador.html">Simulador</a>
+        <a href="tecnica.html">Técnica</a>
+        <a href="galeria.html">Galería</a>
+        <a href="bitacora.html">Bitácora</a>
+        <a href="equipo.html">Equipo</a>
+      </nav>
+
+      <div class="cabecera-acciones">
+        <button type="button" class="btn-icono" data-accion="tema">☀</button>
+        <button type="button" class="btn-icono btn-menu" data-accion="menu" aria-controls="menu" aria-expanded="false" aria-label="Abrir menú">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="migas">
+    <div class="contenedor"><a href="index.html">Inicio</a> <span>›</span> <span>Administración</span></div>
+  </div>
+
+  <!-- ======================================================================
+       1) MIENTRAS SE COMPRUEBA LA SESIÓN
+       Se muestra apenas abre la página y admin.js lo oculta enseguida.
+       ====================================================================== -->
+  <section class="seccion" data-admin="cargando">
+    <div class="contenedor contenedor--angosto">
+      <div class="panel" style="text-align:center">
+        <p style="margin:0">Comprobando la sesión…</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       2) PANTALLA DE ACCESO
+       Aparece solo si el sitio está conectado a la base de datos y no hay
+       ninguna sesión abierta. Los usuarios se crean desde el panel de
+       Supabase (Authentication › Users): esta pantalla no permite
+       registrarse, solo entrar.
+       ====================================================================== -->
+  <section class="seccion" data-admin="acceso" hidden>
+    <div class="contenedor contenedor--angosto">
+      <form class="panel" data-admin="login" autocomplete="on">
+        <img src="logo-completo.png" alt="LEGACYZ" class="acceso-logo">
+        <div class="panel-titulo"><h3>Acceso al panel</h3><span class="pastilla">Requiere cuenta</span></div>
+        <p>Este panel edita el contenido que ven las ocho páginas del sitio. Iniciá sesión para continuar.</p>
+
+        <div class="campo">
+          <label for="acceso-email">Email</label>
+          <input type="email" id="acceso-email" name="email" autocomplete="username" required>
+        </div>
+
+        <div class="campo">
+          <label for="acceso-clave">Contraseña</label>
+          <input type="password" id="acceso-clave" name="clave" autocomplete="current-password" required>
+        </div>
+
+        <p class="campo-error" data-admin="acceso-error"></p>
+
+        <div class="fila" style="margin-top:20px">
+          <button type="submit" class="btn btn--oro" data-admin="acceso-enviar">Entrar</button>
+          <a href="index.html" class="btn btn--fantasma">Volver al sitio</a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       3) EL PANEL
+       Solo se muestra con la sesión iniciada (o en modo local, donde no hay
+       nada que proteger porque los datos viven en esta computadora).
+       ====================================================================== -->
+  <section class="seccion" data-admin="panel" hidden>
+    <div class="contenedor">
+
+      <div class="seccion-cabecera">
+        <span class="etiqueta">Panel interno</span>
+        <h2>Administrar el contenido</h2>
+        <p class="bajada">Todo lo que se edita acá se refleja en las páginas del sitio. No hace falta tocar el código.</p>
+      </div>
+
+      <!-- Barra de sesión: quién está conectado y de dónde salen los datos -->
+      <div class="panel mb-2" data-admin="barra-sesion" hidden>
+        <div class="panel-titulo" style="margin:0;border:0;padding:0">
+          <div class="backend-estado" data-admin="estado-barra"><i></i><span data-admin="sesion-email">—</span></div>
+          <button type="button" class="btn btn--fantasma btn--sm" data-admin="salir">Cerrar sesión</button>
+        </div>
+      </div>
+
+      <div class="admin-grid">
+
+        <nav class="admin-menu">
+          <button type="button" class="activo" data-seccion="sitio">Identidad</button>
+          <button type="button" data-seccion="equipo">Equipo</button>
+          <button type="button" data-seccion="componentes">Componentes</button>
+          <button type="button" data-seccion="galeria">Galería</button>
+          <button type="button" data-seccion="bitacora">Bitácora</button>
+          <button type="button" data-seccion="factores">Factores</button>
+          <button type="button" data-seccion="datos">Datos</button>
+        </nav>
+
+        <div>
+
+          <!-- IDENTIDAD -->
+          <div class="admin-seccion activa" data-seccion="sitio">
+            <div class="seccion-cabecera">
+              <span class="etiqueta">Identidad</span>
+              <h2>Marca y datos institucionales</h2>
+              <p class="bajada">Estos textos aparecen en el encabezado y el pie de las nueve páginas.</p>
+            </div>
+            <form class="panel" data-admin="sitio">
+              <div class="campos-grid">
+                <div class="campo"><label>Nombre de la marca</label><input type="text" name="marca"></div>
+                <div class="campo"><label>Slogan</label><input type="text" name="slogan"></div>
+                <div class="campo"><label>Nombre del producto</label><input type="text" name="producto"></div>
+                <div class="campo"><label>Año</label><input type="text" name="anio"></div>
+                <div class="campo" style="grid-column:1/-1"><label>Descripción del proyecto</label><textarea name="descripcion"></textarea></div>
+                <div class="campo"><label>Institución</label><input type="text" name="institucion"></div>
+                <div class="campo"><label>Curso</label><input type="text" name="curso"></div>
+                <div class="campo"><label>Materia</label><input type="text" name="materia"></div>
+                <div class="campo"><label>Profesor</label><input type="text" name="profesor"></div>
+                <div class="campo"><label>Email de contacto</label><input type="text" name="email"></div>
+              </div>
+              <div class="fila" style="margin-top:20px">
+                <button type="submit" class="btn btn--oro">Guardar cambios</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Las secciones de lista comparten estructura: admin.js las llena
+               a partir de la configuración de campos que tiene adentro. -->
+          <div class="admin-seccion" data-seccion="equipo">
+            <div class="seccion-cabecera">
+              <span class="etiqueta">Equipo</span>
+              <h2>Equipo</h2>
+              <p class="bajada">Integrantes, roles y fotos. El orden define cómo se muestran en la página.</p>
+            </div>
+            <div class="fila mb-2">
+              <button type="button" class="btn btn--oro" data-admin-nuevo>+ Agregar</button>
+            </div>
+            <div class="registro-lista" data-admin-lista></div>
+            <div data-admin-form></div>
+          </div>
+
+          <div class="admin-seccion" data-seccion="componentes">
+            <div class="seccion-cabecera">
+              <span class="etiqueta">Componentes</span>
+              <h2>Componentes</h2>
+              <p class="bajada">Tabla de hardware que aparece en la documentación técnica.</p>
+            </div>
+            <div class="fila mb-2">
+              <button type="button" class="btn btn--oro" data-admin-nuevo>+ Agregar</button>
+            </div>
+            <div class="registro-lista" data-admin-lista></div>
+            <div data-admin-form></div>
+          </div>
+
+          <div class="admin-seccion" data-seccion="galeria">
+            <div class="seccion-cabecera">
+              <span class="etiqueta">Galería</span>
+              <h2>Galería</h2>
+              <p class="bajada">Fotos del proyecto, agrupadas por categoría. La categoría genera el filtro automáticamente.</p>
+            </div>
+            <div class="fila mb-2">
+              <button type="button" class="btn btn--oro" data-admin-nuevo>+ Agregar</button>
+            </div>
+            <div class="registro-lista" data-admin-lista></div>
+            <div data-admin-form></div>
+          </div>
+
+          <div class="admin-seccion" data-seccion="bitacora">
+            <div class="seccion-cabecera">
+              <span class="etiqueta">Bitácora</span>
+              <h2>Bitácora</h2>
+              <p class="bajada">Entradas del proceso de trabajo, ordenadas por fecha.</p>
+            </div>
+            <div class="fila mb-2">
+              <button type="button" class="btn btn--oro" data-admin-nuevo>+ Agregar</button>
+            </div>
+            <div class="registro-lista" data-admin-lista></div>
+            <div data-admin-form></div>
+          </div>
+
+          <div class="admin-seccion" data-seccion="factores">
+            <div class="seccion-cabecera">
+              <span class="etiqueta">Factores</span>
+              <h2>Factores</h2>
+              <p class="bajada">Rangos de gramos por kilo. El valor usado es el que aplica la calculadora.</p>
+            </div>
+            <div class="fila mb-2">
+              <button type="button" class="btn btn--oro" data-admin-nuevo>+ Agregar</button>
+            </div>
+            <div class="registro-lista" data-admin-lista></div>
+            <div data-admin-form></div>
+          </div>
+
+          <!-- DATOS -->
+          <div class="admin-seccion" data-seccion="datos">
+            <div class="seccion-cabecera">
+              <span class="etiqueta">Datos</span>
+              <h2>Dónde se guarda todo</h2>
+            </div>
+
+            <div class="panel">
+              <div class="panel-titulo"><h3>Origen de los datos</h3></div>
+              <div class="backend-estado" data-admin="estado"><i></i><span>Comprobando…</span></div>
+              <div class="medidor mt-2" data-admin="medidor"><i style="width:0"></i></div>
+              <p class="campo-ayuda" data-admin="medidor-texto"></p>
+              <p class="campo-ayuda mt-1" data-admin="estado-detalle"></p>
+            </div>
+
+            <div class="panel mt-2">
+              <div class="panel-titulo"><h3>Copia de seguridad</h3></div>
+              <p>Descargá todo el contenido en un archivo JSON. Sirve como respaldo y también para volver a generar el contenido de <span class="mono">data.js</span>, que es lo que ve el sitio cuando no hay conexión.</p>
+              <div class="fila mt-1">
+                <button type="button" class="btn btn--linea" data-admin="exportar">Descargar copia</button>
+                <button type="button" class="btn btn--peligro" data-admin="restaurar">Restaurar contenido original</button>
+              </div>
+            </div>
+
+            <div class="nota">
+              <span class="nota-icono">◆</span>
+              <p>El modo de datos se elige en <span class="mono">config.js</span>, en la línea <span class="mono">backend</span>. Con <span class="mono">'auto'</span> el sitio usa la base de datos y cae solo al contenido local si no hay conexión. Las páginas no se modifican nunca.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="pie">
+    <div class="contenedor">
+      <div class="pie-grid">
+        <div>
+          <h4>El proyecto</h4>
+          <p><strong data-sitio="marca">LEGACYZ</strong> — <span data-sitio="producto">Calculadora de Requerimiento de Proteína</span></p>
+          <p style="font-size:.82rem"><span data-sitio="curso">Robótica 5° Año</span> · <span data-sitio="institucion">IPET 1308</span> · <span data-sitio="anio">2026</span></p>
+        </div>
+        <div>
+          <h4>Secciones</h4>
+          <div class="pie-links">
+            <a href="proyecto.html">El proyecto</a>
+            <a href="calculadora.html">Calculadora web</a>
+            <a href="simulador.html">Simulador</a>
+            <a href="tecnica.html">Documentación técnica</a>
+          </div>
+        </div>
+        <div>
+          <h4>Cátedra</h4>
+          <div class="pie-links">
+            <a href="galeria.html">Galería</a>
+            <a href="bitacora.html">Bitácora</a>
+            <a href="equipo.html">El equipo</a>
+            <a href="admin.html">Administrar contenido</a>
+          </div>
+        </div>
+      </div>
+      <div class="pie-base">
+        <span data-sitio="materia">Diseño de Páginas Web · Informática</span>
+        <span data-sitio="profesor">Prof. Acosta, Lucas Leonardo</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CAPA DE DATOS Y LÓGICA (el orden importa) -->
+  <script src="config.js"></script>
+  <script src="data.js"></script>
+  <script src="store.js"></script>
+  <script src="ui.js"></script>
+  <script src="script.js"></script>
+  <script src="admin.js"></script>
+
+</body>
+</html>

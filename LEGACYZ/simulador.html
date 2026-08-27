@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Calculadora de requerimiento de proteína — proyecto de Robótica 5° Año, IPET 1308.">
+  <title>Simulador del dispositivo — LEGACYZ</title>
+  <link rel="icon" type="image/png" href="logo.png">
+
+  <!-- Tema guardado: se aplica antes de dibujar para que no parpadee -->
+  <script>try{if(localStorage.getItem('legacyz.tema')==='claro')document.documentElement.setAttribute('data-tema','claro');}catch(e){}</script>
+
+
+  <!-- ========================================================================
+       SDK DE SUPABASE (la base de datos)
+       Va con "async" a propósito: así el navegador NO espera a que este
+       archivo llegue para mostrar la página. Si no hay internet, el propio
+       navegador avisa que no pudo bajarlo y store.js pasa solo al modo
+       local. La página se ve igual de rápido con o sin conexión.
+       ======================================================================== -->
+  <script async src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body data-pagina="simulador">
+
+  <!-- ENCABEZADO — igual en todas las páginas -->
+  <header class="cabecera">
+    <div class="cabecera-contenido">
+      <a href="index.html" class="marca">
+        <span class="marca-logo"><img src="logo.png" alt="Logo de LEGACYZ"></span>
+        <span class="marca-texto">
+          <h1 data-sitio="marca">LEGACYZ</h1>
+          <span class="marca-slogan" data-sitio="slogan">Precisión en cada gramo</span>
+        </span>
+      </a>
+
+      <nav class="nav" id="menu">
+        <a href="index.html">Inicio</a>
+        <a href="proyecto.html">Proyecto</a>
+        <a href="calculadora.html">Calculadora</a>
+        <a href="simulador.html" class="activo">Simulador</a>
+        <a href="tecnica.html">Técnica</a>
+        <a href="galeria.html">Galería</a>
+        <a href="bitacora.html">Bitácora</a>
+        <a href="equipo.html">Equipo</a>
+      </nav>
+
+      <div class="cabecera-acciones">
+        <button type="button" class="btn-icono" data-accion="tema">☀</button>
+        <button type="button" class="btn-icono btn-menu" data-accion="menu" aria-controls="menu" aria-expanded="false" aria-label="Abrir menú">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="migas">
+    <div class="contenedor"><a href="index.html">Inicio</a> <span>›</span> <span>Simulador</span></div>
+  </div>
+
+  <div class="subnav-marco" style="background:var(--lz-superficie)">
+    <div class="contenedor">
+      <nav class="subnav">
+        <a href="calculadora.html">Calculadora web</a>
+        <a href="simulador.html" class="activo">Simulador del dispositivo</a>
+        <a href="tecnica.html">Documentación técnica</a>
+      </nav>
+    </div>
+  </div>
+
+  <section class="seccion">
+    <div class="contenedor">
+
+      <div class="seccion-cabecera">
+        <span class="etiqueta">Sistema · simulación</span>
+        <h2>El dispositivo, en el navegador</h2>
+        <p class="bajada">La misma máquina de estados del programa Arduino, con la pantalla de 16×2 y el teclado matricial 4×4. Se puede usar el mouse o el teclado de la computadora.</p>
+      </div>
+
+      <div class="sim-grid">
+
+        <!-- DISPOSITIVO — la pantalla y el teclado los dibuja simulador.js -->
+        <div>
+          <div class="dispositivo">
+            <div class="dispositivo-marca">
+              <b>LEGACYZ</b>
+              <span>Arduino UNO · LCD I2C 16×2</span>
+            </div>
+            <div class="lcd" data-sim="lcd" role="img" aria-label="Pantalla del dispositivo"></div>
+            <div class="teclado" data-sim="teclado"></div>
+          </div>
+
+          <div class="nota">
+            <span class="nota-icono">◆</span>
+            <p><strong>1, 2 o 3</strong> eligen el objetivo · <strong>0 a 9</strong> escriben el peso · <strong>A</strong> confirma · <strong>C</strong> reinicia.</p>
+          </div>
+        </div>
+
+        <!-- PANELES DE INSPECCIÓN — muestran por dentro lo que hace el Arduino -->
+        <div>
+          <div class="panel">
+            <div class="panel-titulo"><h3>Estado del programa</h3><span class="pastilla">enum Estados</span></div>
+            <div class="estados" data-sim="estados"></div>
+          </div>
+
+          <div class="panel mt-2">
+            <div class="panel-titulo"><h3>Variables</h3><span class="pastilla">en memoria</span></div>
+            <div class="variables" data-sim="variables"></div>
+          </div>
+
+          <div class="panel mt-2">
+            <div class="panel-titulo"><h3>Registro de actividad</h3><span class="pastilla">Monitor serial</span></div>
+            <div class="registro" data-sim="registro"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="seccion-cabecera mt-3">
+        <span class="etiqueta">Por qué una máquina de estados</span>
+        <h2>El programa solo escucha lo que corresponde</h2>
+      </div>
+
+      <div class="grid grid--3">
+        <div class="panel">
+          <h3>Menos condiciones</h3>
+          <p>Cada estado tiene su propio bloque en el <span class="mono">switch</span>. No hace falta preguntar en qué paso estamos: el estado ya lo dice.</p>
+        </div>
+        <div class="panel">
+          <h3>Teclas imposibles</h3>
+          <p>Presionar A antes de escribir un peso no hace nada. El programa ignora la tecla en lugar de calcular con un valor vacío.</p>
+        </div>
+        <div class="panel">
+          <h3>Reinicio en un lugar</h3>
+          <p>La tecla C llama a una sola función que vuelve todas las variables a cero. No hay que repetir esa limpieza en cada rama.</p>
+        </div>
+      </div>
+
+
+      <div class="navegacion-paginas">
+        <a href="calculadora.html" class="btn btn--linea">← Calculadora</a>
+        <a href="tecnica.html" class="btn btn--oro">Documentación técnica →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="pie">
+    <div class="contenedor">
+      <div class="pie-grid">
+        <div>
+          <h4>El proyecto</h4>
+          <p><strong data-sitio="marca">LEGACYZ</strong> — <span data-sitio="producto">Calculadora de Requerimiento de Proteína</span></p>
+          <p style="font-size:.82rem"><span data-sitio="curso">Robótica 5° Año</span> · <span data-sitio="institucion">IPET 1308</span> · <span data-sitio="anio">2026</span></p>
+        </div>
+        <div>
+          <h4>Secciones</h4>
+          <div class="pie-links">
+            <a href="proyecto.html">El proyecto</a>
+            <a href="calculadora.html">Calculadora web</a>
+            <a href="simulador.html">Simulador</a>
+            <a href="tecnica.html">Documentación técnica</a>
+          </div>
+        </div>
+        <div>
+          <h4>Cátedra</h4>
+          <div class="pie-links">
+            <a href="galeria.html">Galería</a>
+            <a href="bitacora.html">Bitácora</a>
+            <a href="equipo.html">El equipo</a>
+            <a href="admin.html">Administrar contenido</a>
+          </div>
+        </div>
+      </div>
+      <div class="pie-base">
+        <span data-sitio="materia">Diseño de Páginas Web · Informática</span>
+        <span data-sitio="profesor">Prof. Acosta, Lucas Leonardo</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CAPA DE DATOS Y LÓGICA (el orden importa) -->
+  <script src="config.js"></script>
+  <script src="data.js"></script>
+  <script src="store.js"></script>
+  <script src="ui.js"></script>
+  <script src="script.js"></script>
+  <script src="simulador.js"></script>
+
+</body>
+</html>

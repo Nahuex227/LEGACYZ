@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Calculadora de requerimiento de proteína — proyecto de Robótica 5° Año, IPET 1308.">
+  <title>El proyecto — LEGACYZ</title>
+  <link rel="icon" type="image/png" href="logo.png">
+
+  <!-- Tema guardado: se aplica antes de dibujar para que no parpadee -->
+  <script>try{if(localStorage.getItem('legacyz.tema')==='claro')document.documentElement.setAttribute('data-tema','claro');}catch(e){}</script>
+
+
+
+  <!-- ========================================================================
+       SDK DE SUPABASE (la base de datos)
+       Va con "async" a propósito: así el navegador NO espera a que este
+       archivo llegue para mostrar la página. Si no hay internet, el propio
+       navegador avisa que no pudo bajarlo y store.js pasa solo al modo
+       local. La página se ve igual de rápido con o sin conexión.
+       ======================================================================== -->
+  <script async src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body data-pagina="proyecto">
+
+  <!-- ENCABEZADO — igual en todas las páginas -->
+  <header class="cabecera">
+    <div class="cabecera-contenido">
+      <a href="index.html" class="marca">
+        <span class="marca-logo"><img src="logo.png" alt="Logo de LEGACYZ"></span>
+        <span class="marca-texto">
+          <h1 data-sitio="marca">LEGACYZ</h1>
+          <span class="marca-slogan" data-sitio="slogan">Precisión en cada gramo</span>
+        </span>
+      </a>
+
+      <nav class="nav" id="menu">
+        <a href="index.html">Inicio</a>
+        <a href="proyecto.html" class="activo">Proyecto</a>
+        <a href="calculadora.html">Calculadora</a>
+        <a href="simulador.html">Simulador</a>
+        <a href="tecnica.html">Técnica</a>
+        <a href="galeria.html">Galería</a>
+        <a href="bitacora.html">Bitácora</a>
+        <a href="equipo.html">Equipo</a>
+      </nav>
+
+      <div class="cabecera-acciones">
+        <button type="button" class="btn-icono" data-accion="tema">☀</button>
+        <button type="button" class="btn-icono btn-menu" data-accion="menu" aria-controls="menu" aria-expanded="false" aria-label="Abrir menú">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="migas">
+    <div class="contenedor"><a href="index.html">Inicio</a> <span>›</span> <span>El proyecto</span></div>
+  </div>
+
+  <section class="seccion">
+    <div class="contenedor">
+
+      <div class="seccion-cabecera">
+        <span class="etiqueta">01 · El problema</span>
+        <h2>Una recomendación que existe pero no llega</h2>
+      </div>
+
+      <div class="contenedor--angosto" style="padding:0;margin:0">
+        <p>Las recomendaciones de consumo de proteína están publicadas y son fáciles de encontrar. El problema es su formato: una tabla con categorías y rangos de gramos por kilo de peso. Para usarla hay que ubicar la categoría propia, elegir un valor del rango y multiplicar. En un gimnasio, en un consultorio o en la cocina de una casa, ese paso casi nunca se hace.</p>
+        <p>Las aplicaciones de celular resuelven la cuenta, pero imponen tres condiciones: un teléfono con batería, conexión a internet y una cuenta de usuario. Decidimos eliminar las tres. El dispositivo se enciende, hace dos preguntas y muestra un número.</p>
+        <h3 class="mt-2">A quién beneficia</h3>
+        <ul>
+          <li>Personas que entrenan y necesitan un objetivo diario concreto en lugar de una idea aproximada.</li>
+          <li>Adultos mayores, donde el consumo suficiente de proteína previene la pérdida de masa muscular.</li>
+          <li>Profesionales que atienden a varias personas seguidas y necesitan el dato en el momento, sin cargar nada.</li>
+        </ul>
+      </div>
+
+      <div class="seccion-cabecera mt-3">
+        <span class="etiqueta">02 · Cómo funciona</span>
+        <h2>Tres estados y una multiplicación</h2>
+      </div>
+
+      <p>El programa no es una secuencia larga: es una <strong>máquina de estados</strong>. En cada momento el dispositivo está en uno de tres estados y solo acepta las teclas que tienen sentido ahí. Eso hace que sea imposible, por ejemplo, pedir un resultado sin haber elegido un objetivo.</p>
+
+      <div class="grid grid--3 mt-2">
+        <div class="panel revelar">
+          <span class="tarjeta-numero">SELECCION_MENU</span>
+          <h3>Elegir el objetivo</h3>
+          <p>La pantalla ofrece tres opciones. Las teclas 1, 2 y 3 cargan el factor de gramos por kilo correspondiente.</p>
+        </div>
+        <div class="panel revelar">
+          <span class="tarjeta-numero">INGRESO_PESO</span>
+          <h3>Escribir el peso</h3>
+          <p>Se ingresan hasta tres dígitos con el teclado numérico. La tecla A confirma; la tecla C reinicia todo.</p>
+        </div>
+        <div class="panel revelar">
+          <span class="tarjeta-numero">MOSTRAR_RESULTADO</span>
+          <h3>Leer el resultado</h3>
+          <p>El Arduino multiplica peso por factor y muestra los gramos diarios con un decimal. Cualquier tecla vuelve al menú.</p>
+        </div>
+      </div>
+
+      <div class="nota">
+        <span class="nota-icono">◆</span>
+        <p>El dispositivo ofrece <strong>tres</strong> objetivos porque la pantalla tiene 16 columnas y no caben más abreviaturas legibles. La <a href="calculadora.html">calculadora web</a> usa las <strong>cinco</strong> categorías completas de la guía.</p>
+      </div>
+
+      <h3 class="mt-3">Factores de proteína</h3>
+      <p>El rango proviene de la guía práctica de cálculo de requerimiento de proteína. Para que el dispositivo devuelva un número único y no un intervalo, cada categoría usa el punto medio de su rango.</p>
+
+      <div class="tabla-marco tabla-marco--scroll mt-2">
+        <table>
+          <thead>
+            <tr><th>Categoría</th><th>Estilo de vida u objetivo</th><th>Rango</th><th>Valor usado</th><th>Dispositivo</th></tr>
+          </thead>
+          <tbody data-lista="factores"></tbody>
+        </table>
+      </div>
+
+      <div class="seccion-cabecera mt-3">
+        <span class="etiqueta">03 · Dificultades</span>
+        <h2>Qué se rompió y cómo lo resolvimos</h2>
+      </div>
+
+      <div class="grid grid--2">
+        <div class="panel revelar">
+          <h3>La pantalla encendía en blanco</h3>
+          <p>El backlight funcionaba pero no aparecía ningún caracter. El módulo I2C no siempre responde en la misma dirección: el nuestro estaba en <span class="mono">0x27</span> y no en <span class="mono">0x3F</span>. Lo encontramos con un barrido de direcciones.</p>
+        </div>
+        <div class="panel revelar">
+          <h3>El teclado devolvía teclas equivocadas</h3>
+          <p>Al presionar 1 aparecía 4. Teníamos invertidas filas y columnas: los pines S1 a S4 son las filas y S5 a S8 las columnas. Los pines S9 a S16 del módulo están duplicados y no se usan.</p>
+        </div>
+
+        <!-- ====================================================================
+             Dificultad documentada a partir de la revisión del código:
+             el borrador original de la guía tenía un error de tipeo que
+             impedía compilar. Ver tecnica.html, donde está el código ya
+             corregido que se cargó finalmente en la placa.
+             ==================================================================== -->
+        <div class="panel revelar">
+          <h3>El programa no compilaba</h3>
+          <p>En el borrador, la llamada del <span class="mono">setup()</span> estaba escrita <span class="mono">mostrarMenu Inicial()</span>, con un espacio en el medio. El compilador leía dos palabras separadas y cortaba con un error de sintaxis. Es un error difícil de ver a simple vista: se resolvió juntando el nombre en <span class="mono">mostrarMenuInicial()</span>, tal como está declarada la función más abajo.</p>
+        </div>
+        <div class="panel revelar">
+          <h3>Los textos se cortaban</h3>
+          <p>El menú de la primera versión decía <span class="mono">1-Sed 2-Atl 3-Fat</span>: 17 caracteres en una pantalla de 16. La línea del peso tenía el mismo problema con <span class="mono">Peso:    kg (A=Ok)</span>, de 18. Reescribimos cada mensaje contando los caracteres uno por uno.</p>
+        </div>
+        <div class="panel revelar">
+          <h3>El peso se desbordaba</h3>
+          <p>Sin límite de dígitos, un peso de cuatro cifras empujaba el resto del texto fuera de la pantalla. Limitamos la entrada a tres dígitos, que cubre cualquier peso corporal real.</p>
+        </div>
+      </div>
+
+      <h3 class="mt-3">Lo que aprendimos</h3>
+      <p>Que un <span class="mono">enum</span> de tres estados ordena un programa mejor que veinte condicionales encadenados. Que en hardware conviene probar una conexión por vez antes de armar todo el circuito. Que un error de tipeo de un solo espacio puede frenar un proyecto entero, y que conviene compilar seguido en lugar de escribir todo el programa de una vez. Y que trabajar con una pantalla de 32 caracteres obliga a escribir mensajes cortos y claros, lo que resultó una restricción útil y no un problema.</p>
+
+
+      <div class="navegacion-paginas">
+        <a href="index.html" class="btn btn--linea">← Inicio</a>
+        <a href="tecnica.html" class="btn btn--oro">Documentación técnica →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="pie">
+    <div class="contenedor">
+      <div class="pie-grid">
+        <div>
+          <h4>El proyecto</h4>
+          <p><strong data-sitio="marca">LEGACYZ</strong> — <span data-sitio="producto">Calculadora de Requerimiento de Proteína</span></p>
+          <p style="font-size:.82rem"><span data-sitio="curso">Robótica 5° Año</span> · <span data-sitio="institucion">IPET 1308</span> · <span data-sitio="anio">2026</span></p>
+        </div>
+        <div>
+          <h4>Secciones</h4>
+          <div class="pie-links">
+            <a href="proyecto.html">El proyecto</a>
+            <a href="calculadora.html">Calculadora web</a>
+            <a href="simulador.html">Simulador</a>
+            <a href="tecnica.html">Documentación técnica</a>
+          </div>
+        </div>
+        <div>
+          <h4>Cátedra</h4>
+          <div class="pie-links">
+            <a href="galeria.html">Galería</a>
+            <a href="bitacora.html">Bitácora</a>
+            <a href="equipo.html">El equipo</a>
+            <a href="admin.html">Administrar contenido</a>
+          </div>
+        </div>
+      </div>
+      <div class="pie-base">
+        <span data-sitio="materia">Diseño de Páginas Web · Informática</span>
+        <span data-sitio="profesor">Prof. Acosta, Lucas Leonardo</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CAPA DE DATOS Y LÓGICA (el orden importa) -->
+  <script src="config.js"></script>
+  <script src="data.js"></script>
+  <script src="store.js"></script>
+  <script src="ui.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>
