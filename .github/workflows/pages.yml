@@ -1,0 +1,52 @@
+# ==========================================================================
+# Publica el sitio en GitHub Pages.
+#
+# El sitio vive en la subcarpeta LEGACYZ/, así que no se puede usar la opción
+# simple de Pages (que solo permite la raíz del repo o /docs). Este flujo
+# toma esa carpeta y la publica tal cual, sin mover ningún archivo.
+#
+# ANTES DE QUE FUNCIONE, UNA SOLA VEZ:
+#   Settings › Pages › Build and deployment › Source: "GitHub Actions"
+#   (lo tiene que hacer el dueño del repo; hace falta permiso de admin)
+#
+# Después, cada push a main vuelve a publicar el sitio solo.
+# ==========================================================================
+
+name: Publicar el sitio
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:      # permite publicar a mano desde la pestaña Actions
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Si se pushea dos veces seguidas, se publica la última y se cancela la anterior.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Bajar el repositorio
+        uses: actions/checkout@v7
+
+      - name: Preparar Pages
+        uses: actions/configure-pages@v6
+
+      - name: Empaquetar la carpeta del sitio
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: LEGACYZ
+
+      - name: Publicar
+        id: deploy
+        uses: actions/deploy-pages@v5
