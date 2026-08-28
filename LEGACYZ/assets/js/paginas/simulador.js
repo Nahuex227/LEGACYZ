@@ -84,7 +84,7 @@
 
   function mostrarMenuInicial() {
     limpiarLcd();
-    imprimir(0, 0, '1Sed 2Atl 3Grasa');
+    imprimir(0, 0, '1Sed 2Atl 3Df');
     imprimir(0, 1, 'Elija opcion...');
     pintarLcd(null);
   }
