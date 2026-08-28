@@ -184,7 +184,7 @@
       bloque.innerHTML =
         '<h4>Colaborar</h4>' +
         '<p>LEGACYZ se sostiene con lo que aporta cada uno. Con lo que juntamos ' +
-        'compramos componentes y seguimos mejorando el dispositivo.</p>' +
+        'seguiremos mejorando la página con más funciones.</p>' +
         '<div class="fila fila--donacion">' + botones + '</div>';
       bloque.hidden = false;
     });
